@@ -1,0 +1,6 @@
+Main:
+    1)Implement form layouts
+    2)Implement form posting function
+    3)Implement photo attachments
+    4)Implement photo posting function
+    5)Implement power automate server API
