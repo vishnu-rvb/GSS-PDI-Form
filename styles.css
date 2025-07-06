@@ -34,3 +34,14 @@ button {
     cursor: pointer;
 }
 button.clear {background-color: #f44336;}
+.dynamic-row {
+    display: flex;
+    gap: 10px;
+    margin: 5px 0;
+    align-items: center;
+    }
+.dynamic-row input[name="issue"] {flex:3;}
+.dynamic-row input[name="qty"] {flex: 1;min-width:60px;max-width:80px;}
+.dynamic-row select[name="status"] {flex:2;min-width:100px;}
+
+

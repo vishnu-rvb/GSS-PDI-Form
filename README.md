@@ -7,10 +7,11 @@ The PDI details contains
 3. Container number(int)
 4. Container ID(string)
 5. Container size([ '40 feet','20 feet','Air' ])
-6. Start date(Date)
-7. Start shift([ 'A','B','C' ])
+6. Date(Date)
+7. Shift([ 'A','B','C' ])
 8. PDI inspectors([ name(string) ])
 9. Issues([ [ issue(string),qty(int),status(sting) ] ])
+10. Status(['WIP','Completed'])
 
 PDI photos to be stored as inside a folder named f"{Project Reference number} Cnt{Container number}" inside a one drive specified location.
 
