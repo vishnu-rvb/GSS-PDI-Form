@@ -10,13 +10,33 @@ function addRow(type) {
     else {console.error(`template for ${type} not found`);}
 }
 
+async function compressImages(Images) {
+    let Images_c=[]
+    const compressionOptions = {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true
+    };
+    try {
+    Images_c= await Promise.all(
+        Images.map(Image => imageCompression(Image, compressionOptions))
+    );
+    }
+    catch (err) {
+        alert('Error compressing images');
+        console.error(err);
+        return;
+    }
+    return Images_c;
+}
+
 function clearForm() {
     document.getElementById('form').reset();
 }
 
-function submitForm(event){
+async function submitForm(event){
     event.preventDefault();
-    const URL = 'url';
+    const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const formData = new FormData(event.target);
 
     // Collect PDI Inspectors
@@ -25,11 +45,13 @@ function submitForm(event){
     // Collect Issues
     const Rows_Issues = document.querySelectorAll('#issues-container .dynamic-row');
     const data_Issues = Array.from(Rows_Issues).map( row =>{
-        const inputs = row.querySelectorAll('input');
+        const issueInput = row.querySelector('input[name="issue"]');
+        const qtyInput = row.querySelector('input[name="qty"]');
+        const statusSelect = row.querySelector('select[name="status"]');
         return {
-            issue: inputs[0]?.value.trim(),
-            qty: parseInt(inputs[1]?.value) || 1,
-            status: inputs[2]?.value.trim()
+            issue: issueInput?.value.trim(),
+            qty: parseInt(qtyInput?.value) || 1,
+            status: statusSelect?.value.trim()
         };
     });
 
@@ -45,10 +67,27 @@ function submitForm(event){
         Issues: data_Issues,
         Status: formData.get('Status')
     };
-    console.log(data);
-    //fetch(URL, {method: 'POST',headers: {'Content-Type':'application/json'},body: JSON.stringify(data)})
-    //.then(response=>{console.log('Response:', response);alert('PDI details updated');clearForm();})
-    //.catch(error=>{console.error('Error:', error);alert('Error submitting data');});
+
+    //Collect images
+    const Input_PDI_report_images= document.getElementById('input-PDI report images');
+    const Inputs_PDI_loading_images= document.getElementById('input-PDI loading images');
+    const reportImgs = Array.from(Input_PDI_report_images.files);
+    const loadingImgs = Array.from(Inputs_PDI_loading_images.files);
+
+    let reportImgs_c = await compressImages(reportImgs);
+    let loadingImgs_c = await compressImages(loadingImgs);
+
+    // Create multipart/form-data payload
+    const payload = new FormData();
+    payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    reportImgs_c.forEach((file,index)=>payload.append('PDI_report_images', file, `PDI report ${index}`));
+    loadingImgs_c.forEach((file,index)=>payload.append('PDI_loading_images', file, `Loading image ${index}`));
+
+    console.log(Array.from(payload.entries()));
+    fetch(URL,{method:'POST',body:payload})
+    .then(response=>{console.log('Response:', response);alert('PDI details updated');})//clearForm();})
+    .catch(error=>{console.error('Error:', error);alert('Error submitting data');});
 }
 
-document.getElementById('form').addEventListener('submit',submitForm);
+document.getElementById('form').addEventListener('submit', submitForm);
+

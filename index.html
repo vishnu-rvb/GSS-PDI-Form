@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSS PDI Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
     <script src="script.js " defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="heading">
+    <img src="assets/Logo.png" alt="Logo" style="height: 50px;">
     <h1>GSS PDI Form</h1>
+    </div>
     <div id="reader" width="600px"></div>
 
     <!--templates for inspectors-->
@@ -48,17 +52,17 @@
         <input type="text" id="input-Container ID" name="Container ID" required>
         <!--Container size([ '40 feet','20 feet','Air' ])-->
         <label for="input-Container size">Container size:</label>
-        <select id="input-Container size" name="Container size">
+        <select id="input-Container size" name="Container size" required>
             <option value="40 feet">40 feet</option>
             <option value="20 feet">20 feet</option>
             <option value="Air">Air</option>
         </select>
         <!--Date(Date)-->
         <label for="input-Date">Date:</label>
-        <input type="date" id="input-Date" name="Date">
+        <input type="date" id="input-Date" name="Date" required>
         <!--Shift([ 'A','B','C' ])-->
         <label for="input-Shift">Shift:</label>
-        <select id="input-Shift" name="Shift">
+        <select id="input-Shift" name="Shift" required>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -81,18 +85,24 @@
 
         <!--Status(['WIP','Completed'])-->
         <label for="input-Status">Status:</label>
-        <select id="input-Status" name="Status">
+        <select id="input-Status" name="Status" required>
             <option value="WIP">WIP</option>
             <option value="Completed">Completed</option>
         </select>
 
+        <!--PDI report images-->
+        <label for="input-PDI report images">PDI report:</label>
+        <input type="file" id="input-PDI report images" name="PDI report images" accept="image/*" multiple>
+        <!--PDI loading images-->
+        <label for="input-PDI loading images">PDI loading images:</label>
+        <input type="file" id="input-PDI loading images" name="PDI loading images" accept="image/*" multiple>
+
+        <!--submit,clear buttons-->
         <div style="margin-top: 20px; display: block; width: 100%;">
             <button type="submit">Submit</button>
             <button type="button" class="clear" onclick="clearForm()">Clear</button>
         </div>
     </form>
-
-
 
 </body>
 </html>

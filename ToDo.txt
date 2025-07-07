@@ -1,6 +1,12 @@
 Main:
-    1)Implement form layouts
-    2)Implement form posting function
-    3)Implement photo attachments
-    4)Implement photo posting function
-    5)Implement power automate server API
+    1)Implement form layouts -> completed
+    2)Implement form posting function -> completed
+    3)Implement photo attachments -> completed
+    4)Implement photo posting function -> completed
+    5)Implement power automate server API -> completed
+    6)Deployment
+    7)Implement renaming of attachments
+    8)Test in mobile/tablet
+Bugs:
+    1)Form submission taking too much and screen idle-> to display loading state and disable form
+
