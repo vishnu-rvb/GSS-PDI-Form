@@ -53,4 +53,20 @@ button.clear {background-color: #f44336;}
 .dynamic-row input[name="qty"] {flex: 1;min-width:60px;max-width:80px;}
 .dynamic-row select[name="status"] {flex:2;min-width:100px;}
 
-
+#loading-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.loading-box {
+    padding: 20px 40px;
+    background: white;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}

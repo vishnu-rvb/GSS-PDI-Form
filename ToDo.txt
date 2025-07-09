@@ -5,8 +5,8 @@ Main:
     4)Implement photo posting function -> completed
     5)Implement power automate server API -> completed
     6)Deployment
-    7)Implement renaming of attachments
-    8)Test in mobile/tablet
+    7)Implement renaming of attachments -> completed
+    8)Test in mobile/tablet -> completed
 Bugs:
-    1)Form submission taking too much and screen idle-> to display loading state and disable form
-
+    1)Form submission taking too much and screen idle-> to display loading state and disable form -> completed
+    2)operator unaware of if data entered or not

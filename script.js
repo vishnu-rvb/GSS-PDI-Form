@@ -1,3 +1,20 @@
+function toggleFormState(disabled) {
+    const form = document.getElementById('form');
+    const elements = form.querySelectorAll('input, select, button, textarea');
+    elements.forEach(i =>{i.disabled = disabled;});
+}
+
+function showLoading(show) {
+    let loadingOverlay = document.getElementById('loading-overlay');
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loading-overlay';
+        loadingOverlay.innerHTML = `<div class="loading-box">Loading...</div>`;
+        document.body.appendChild(loadingOverlay);
+    }
+    loadingOverlay.style.display = (show ? 'flex' : 'none');
+}
+
 function addRow(type) {
     const template = document.getElementById(`template-${type}`);
     const container = document.getElementById(`${type}-container`);
@@ -84,9 +101,30 @@ async function submitForm(event){
     loadingImgs_c.forEach((file,index)=>payload.append('PDI_loading_images', file, `Loading image ${index}`));
 
     console.log(Array.from(payload.entries()));
-    fetch(URL,{method:'POST',body:payload})
-    .then(response=>{console.log('Response:', response);alert('PDI details updated');})//clearForm();})
-    .catch(error=>{console.error('Error:', error);alert('Error submitting data');});
+
+    toggleFormState(true);
+    showLoading(true);
+
+    try{
+        const response= await fetch(URL,{method:'POST',body:payload});
+        console.log('Response:', response);
+        if (response.ok){
+            alert('PDI details updated');
+            //clearForm();
+        }
+        else {
+            alert('Failed to submit details');
+            //clearForm();
+        }
+    }
+    catch (error){
+        console.error('Error:', error);
+        alert('Error submitting data');
+    }
+    finally{
+    toggleFormState(false);
+    showLoading(false);
+    }
 }
 
 document.getElementById('form').addEventListener('submit', submitForm);
