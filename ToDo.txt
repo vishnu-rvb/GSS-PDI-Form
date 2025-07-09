@@ -10,3 +10,6 @@ Main:
 Bugs:
     1)Form submission taking too much and screen idle-> to display loading state and disable form -> completed
     2)operator unaware of if data entered or not
+    3)no case protection in text inputs -> completed
+    4)no number type check in number inputs -> ignored
+    5)file name replacement erases extension -> completed

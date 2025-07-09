@@ -30,7 +30,7 @@ function addRow(type) {
 async function compressImages(Images) {
     let Images_c=[]
     const compressionOptions = {
-        maxSizeMB: 3,
+        maxSizeMB: 2,
         maxWidthOrHeight: 1024,
         useWebWorker: true
     };
@@ -73,10 +73,10 @@ async function submitForm(event){
     });
 
     const data = {
-        Project_Reference_number: formData.get('Project Reference number'),
+        Project_Reference_number: formData.get('Project Reference number').toUpperCase(),
         Customer_name: formData.get('Customer name'),
         Container_number: formData.get('Container number'),
-        Container_ID: formData.get('Container ID'),
+        Container_ID: formData.get('Container ID').toUpperCase(),
         Container_size: formData.get('Container size'),
         Date: formData.get('Date'),
         Shift: formData.get('Shift'),
@@ -97,8 +97,12 @@ async function submitForm(event){
     // Create multipart/form-data payload
     const payload = new FormData();
     payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-    reportImgs_c.forEach((file,index)=>payload.append('PDI_report_images', file, `PDI report ${index}`));
-    loadingImgs_c.forEach((file,index)=>payload.append('PDI_loading_images', file, `Loading image ${index}`));
+    reportImgs_c.forEach((file,index)=>
+        payload.append('PDI_report_images', file, `PDI report ${index}.${file.name.split('.').pop()}`)
+    );
+    loadingImgs_c.forEach((file,index)=>
+        payload.append('PDI_loading_images', file, `Loading image ${index}.${file.name.split('.').pop()}`)
+    );
 
     console.log(Array.from(payload.entries()));
 
