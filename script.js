@@ -1,4 +1,4 @@
-function toggleFormState(disabled) {
+function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
     elements.forEach(i =>{i.disabled = disabled;});
@@ -53,6 +53,8 @@ function clearForm() {
 
 async function submitForm(event){
     event.preventDefault();
+    disableForm(true);
+
     const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const formData = new FormData(event.target);
 
@@ -106,7 +108,6 @@ async function submitForm(event){
 
     console.log(Array.from(payload.entries()));
 
-    toggleFormState(true);
     showLoading(true);
 
     try{
@@ -126,7 +127,7 @@ async function submitForm(event){
         alert('Error submitting data');
     }
     finally{
-    toggleFormState(false);
+    disableForm(false);
     showLoading(false);
     }
 }
