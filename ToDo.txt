@@ -8,9 +8,11 @@ Main:
     7)Implement renaming of attachments -> completed
     8)Test in mobile/tablet -> completed
 Bugs:
-    1)Form submission taking too much and screen idle-> to display loading state and disable form -> completed
+    1)Form submission taking too much and screen idle,to display loading state and disable form -> completed
     2)operator unaware of if data entered or not
     3)no case protection in text inputs -> completed
     4)no number type check in number inputs -> completed
     5)file name replacement erases extension -> completed
     6)Double submission possible -> completed
+    7)errors in phone not visible -> completed
+    8)issues input too small in phone,send to next line -> to check in tablet
