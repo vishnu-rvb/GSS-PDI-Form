@@ -99,10 +99,10 @@ async function submitForm(event){
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
         reportImgs_c.forEach((file,index)=>
-            payload.append('PDI_report_images', file, `PDI report ${index}.${file.name.split('.').pop()}`)
+            payload.append('PDI_report_images', file, `PDI report ${index+1} ${file.name}`)
         );
         loadingImgs_c.forEach((file,index)=>
-            payload.append('PDI_loading_images', file, `Loading image ${index}.${file.name.split('.').pop()}`)
+            payload.append('PDI_loading_images', file, `Loading image ${index+1} ${file.name}`)
         );
 
         console.log(Array.from(payload.entries()));
