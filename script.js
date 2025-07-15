@@ -74,7 +74,7 @@ async function submitForm(event){
         });
 
         const data = {
-            Project_Reference_number: `${formData.get('Project Reference number')}`.toUpperCase(),
+            Project_Reference_number: `${formData.get('Project Reference number')}`.toUpperCase().replace(/[\/\\]/g, ','),
             Customer_name: formData.get('Customer name'),
             Container_number: formData.get('Container number'),
             Container_ID: `${formData.get('Container ID')}`.toUpperCase(),

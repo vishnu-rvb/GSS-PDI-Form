@@ -18,3 +18,4 @@ Bugs:
     8)issues input too small in phone,send to next line -> to check in tablet
     9)Photos get overwritten -> completed
     10)File renaming index starts from 0 -> completed
+    11)"/" in reference number creates wrong storage path -> completed
