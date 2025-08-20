@@ -1,7 +1,8 @@
 function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
-    elements.forEach(i =>{i.disabled = disabled;});
+    //elements.forEach(i =>{i.disabled = disabled;});
+    for (const i of elements){i.disabled=disabled;};
 }
 
 function showLoading(show) {
@@ -83,7 +84,8 @@ async function submitForm(event){
             Shift: formData.get('Shift'),
             PDI_inspectors: data_PDI_inspectors,
             Issues: data_Issues,
-            Status: formData.get('Status')
+            Status: formData.get('Status'),
+            uploader:formData.get('uploader')
         };
 
         //Collect images
@@ -98,12 +100,18 @@ async function submitForm(event){
         // Create multipart/form-data payload
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-        reportImgs_c.forEach((file,index)=>
+        /*reportImgs_c.forEach((file,index)=>
             payload.append('PDI_report_images', file, `PDI report ${index+1} ${file.name}`)
         );
         loadingImgs_c.forEach((file,index)=>
             payload.append('PDI_loading_images', file, `Loading image ${index+1} ${file.name}`)
-        );
+        );*/
+        for (let i=0;i<reportImgs_c.length;i++){
+                payload.append('PDI_report_images', reportImgs_c[i], `PDI report ${i+1} ${reportImgs_c[i].name}`);
+        };
+        for (let i=0;i<loadingImgs_c.length;i++){
+                payload.append('PDI_loading_images', loadingImgs_c[i], `Loading image ${i+1} ${loadingImgs_c[i].name}`);
+        };
 
         console.log(Array.from(payload.entries()));
 
