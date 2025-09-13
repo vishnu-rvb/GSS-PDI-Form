@@ -1,111 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSS PDI Form</title>
-    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
-    <script src="script.js " defer></script>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>GSS Digital PDI</title>
+<link rel="stylesheet" href="menu.css">
 </head>
 <body>
-    <div class="heading">
-    <img src="assets/Logo.png" alt="Logo" style="height: 50px;">
-    <h1>GSS PDI Form</h1>
-    </div>
-    <div id="reader" width="600px"></div>
-
-    <!--templates for inspectors-->
-    <template id="template-inspectors">
-    <div class="dynamic-row">
-        <input type="text" name="PDI inspector" placeholder="Inspector name" />
-        <button type="button" onclick="this.parentElement.remove()">-</button>
-    </div>
-    </template>
-
-    <!--templates for issues-->
-    <template id="template-issues">
-    <div class="dynamic-row">
-        <input type="text" name="issue" placeholder="Issue" />
-        <input type="number" name="qty" placeholder="Qty" min="1" />
-        <select name="status">
-            <option value="Hold">Hold</option>
-            <option value="Reworked">Reworked</option>
-            <option value="Scraped">Scraped</option>
-        </select>
-        <button type="button" onclick="this.parentElement.remove()">-</button>
-    </div>
-    </template>
-
-    <form id="form">
-        <!--Project Reference number(string)-->
-        <label for="input-Project Reference number">Project Reference number:</label>
-        <input type="text" id="input-Project Reference number" name="Project Reference number" required>
-        <!--Customer name(string)-->
-        <label for="input-Customer name">Customer name:</label>
-        <input type="text" id="input-Customer name" name="Customer name" required>
-        <!--Container number(int)-->
-        <label for="input-Container number">Container number:</label>
-        <input type="number" id="input-Container number" name="Container number"  min="1" required>
-        <!--Container ID(string)-->
-        <label for="input-Container ID">Container ID:</label>
-        <input type="text" id="input-Container ID" name="Container ID" required>
-        <!--Container size([ '40 feet','20 feet','Air' ])-->
-        <label for="input-Container size">Container size:</label>
-        <select id="input-Container size" name="Container size" required>
-            <option value="40 feet">40 feet</option>
-            <option value="20 feet">20 feet</option>
-            <option value="Air">Air</option>
-        </select>
-        <!--Date(Date)-->
-        <label for="input-Date">Date:</label>
-        <input type="date" id="input-Date" name="Date" required>
-        <!--Shift([ 'A','B','C' ])-->
-        <label for="input-Shift">Shift:</label>
-        <select id="input-Shift" name="Shift" required>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-        </select>
-
-        <!--PDI inspectors([ name(string) ])-->
-        <div style="display: flex; align-items: center; gap: 10px;">
-        <label for="input-PDI inspectors">PDI inspectors:</label>
-        <button type="button" onclick="addRow('inspectors')">+ Add Inspector</button>
-        </div>
-        <div id="inspectors-container"></div>
-        
-
-        <!--Issues([ [ issue(string),qty(int),status(sting) ] ])-->
-        <div style="display: flex; align-items: center; gap: 10px;">
-        <label for="input-Issues">Issues:</label>
-        <button type="button" onclick="addRow('issues')">+ Add Issue</button>
-        </div>
-        <div id="issues-container"></div>
-
-        <!--Status(['WIP','Completed'])-->
-        <label for="input-Status">Status:</label>
-        <select id="input-Status" name="Status" required>
-            <option value="WIP">WIP</option>
-            <option value="Completed">Completed</option>
-        </select>
-
-        <!--PDI report images-->
-        <label for="input-PDI report images">PDI report:</label>
-        <input type="file" id="input-PDI report images" name="PDI report images" accept="image/*" multiple>
-        <!--PDI loading images-->
-        <label for="input-PDI loading images">PDI loading images:</label>
-        <input type="file" id="input-PDI loading images" name="PDI loading images" accept="image/*" multiple>
-
-        <label for="input-uploader">Uploaded by:</label>
-        <input type="text" id="input-uploader" name="uploader" required>
-
-        <!--submit,clear buttons-->
-        <div style="margin-top: 20px; display: block; width: 100%;">
-            <button type="submit">Submit</button>
-            <button type="button" class="clear" onclick="clearForm()">Clear</button>
-        </div>
-    </form>
+<header class="heading">
+<img src="assets/Logo.png" alt="Logo" class="logo">
+<script src="menu.js"></script>
+<h1>GSS PDI</h1>
+<!-- <nav>
+<button onclick="loadModule('modules/DataForm')">1. PDI Data Form</button>
+<button onclick="loadModule('modules/PDIreport')">2. Fill PDI Report</button>
+<button onclick="loadModule('modules/MakePDIreport')">3. Make PDI Report</button>
+</nav> -->
+</header>
+<meta http-equiv="refresh" content="1; url=modules/DataForm/index.html" />
+<main id="content">
+<!--<p>Select an option from above.</p>-->
+</main>
 
 </body>
 </html>

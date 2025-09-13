@@ -1,4 +1,4 @@
-# GSS PDI Form
+# GSS PDI Data Form
 A simple form for PDI operators to enter PDI details and loading photos.
 
 The PDI details contains 
@@ -18,3 +18,8 @@ PDI photos to be stored as inside a folder named f"{Project Reference number} Cn
 PDI inspectors and Issues to be provided with addable and removable fields
 
 All the details are to be posted in an one drive specified excel file
+
+# Menu 
+A simple menu where users can select to either enter data or fill or make PDI reports
+
+# GSS PDI report

@@ -1,3 +1,4 @@
+# GSS PDI Data Form
 Main:
     1)Implement form layouts -> completed
     2)Implement form posting function -> completed
@@ -22,3 +23,22 @@ Bugs:
     12)No uniformity in cnt ID typing
     13)No uploader traceability -> completed
     14)forEach is slower than for loop -> completed
+    15)No photo upload status traceability
+
+# Menu
+Main:
+    1)Implement menu system -> completed
+
+# GSS PDI Reports
+Main:
+    1)Implement PDI report form layouts
+    2)Implement PDI report generation layouts
+    3)Implement PDI report form submission
+    4)Implement PDI report generation submission
+    5)Implement PDI report pdf conversion
+    6)Implement PDI report pdf posting
+    7)Implement PDI report pdf renaming and storage
+    8)Modify power automate server API
+    9)Test in mobile/tablet
+    10)Explore on PDI report generation cache management
+Bugs:

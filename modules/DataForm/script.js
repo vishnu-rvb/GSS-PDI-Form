@@ -58,9 +58,11 @@ async function submitForm(event){
     const formData = new FormData(event.target);
     try{
         disableForm(true);
+        
         // Collect PDI Inspectors
         const Inputs_PDI_inspectors = document.querySelectorAll('#inspectors-container input[name="PDI inspector"]');
         const data_PDI_inspectors = Array.from(Inputs_PDI_inspectors).map(input=>input.value.trim()).filter(value=>(value!==''));
+
         // Collect Issues
         const Rows_Issues = document.querySelectorAll('#issues-container .dynamic-row');
         const data_Issues = Array.from(Rows_Issues).map( row =>{
@@ -74,6 +76,18 @@ async function submitForm(event){
             };
         });
 
+        //Collect images
+        const Input_PDI_report_images= document.getElementById('input-PDI report images');
+        const Inputs_PDI_loading_images= document.getElementById('input-PDI loading images');
+        const reportImgs = Array.from(Input_PDI_report_images.files);
+        const loadingImgs = Array.from(Inputs_PDI_loading_images.files);
+
+        let PhotoStatus='';
+        if(reportImgs.length>=1){PhotoStatus+='Y';}
+        else{PhotoStatus+='N';}
+        if(loadingImgs.length>=1){PhotoStatus+='Y';}
+        else{PhotoStatus+='N';}
+
         const data = {
             Project_Reference_number: `${formData.get('Project Reference number')}`.toUpperCase().replace(/[\/\\]/g, ','),
             Customer_name: formData.get('Customer name'),
@@ -85,30 +99,18 @@ async function submitForm(event){
             PDI_inspectors: data_PDI_inspectors,
             Issues: data_Issues,
             Status: formData.get('Status'),
-            uploader:formData.get('uploader')
+            uploader:formData.get('uploader'),
+            photoStatus:PhotoStatus
         };
-
-        //Collect images
-        const Input_PDI_report_images= document.getElementById('input-PDI report images');
-        const Inputs_PDI_loading_images= document.getElementById('input-PDI loading images');
-        const reportImgs = Array.from(Input_PDI_report_images.files);
-        const loadingImgs = Array.from(Inputs_PDI_loading_images.files);
-
-        let reportImgs_c = await compressImages(reportImgs);
-        let loadingImgs_c = await compressImages(loadingImgs);
 
         // Create multipart/form-data payload
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-        /*reportImgs_c.forEach((file,index)=>
-            payload.append('PDI_report_images', file, `PDI report ${index+1} ${file.name}`)
-        );
-        loadingImgs_c.forEach((file,index)=>
-            payload.append('PDI_loading_images', file, `Loading image ${index+1} ${file.name}`)
-        );*/
+        let reportImgs_c = await compressImages(reportImgs);
         for (let i=0;i<reportImgs_c.length;i++){
                 payload.append('PDI_report_images', reportImgs_c[i], `PDI report ${i+1} ${reportImgs_c[i].name}`);
         };
+        let loadingImgs_c = await compressImages(loadingImgs);
         for (let i=0;i<loadingImgs_c.length;i++){
                 payload.append('PDI_loading_images', loadingImgs_c[i], `Loading image ${i+1} ${loadingImgs_c[i].name}`);
         };
