@@ -28,7 +28,7 @@ function addRow(type) {
     else {console.error(`template for ${type} not found`);}
 }
 
-async function compressImages(Images) {
+async function compressImages(Images,method='sequential') {
     let Images_c=[]
     const compressionOptions = {
         maxSizeMB: 2,
@@ -36,20 +36,90 @@ async function compressImages(Images) {
         useWebWorker: true
     };
     try {
-    Images_c= await Promise.all(
-        Images.map(Image => imageCompression(Image, compressionOptions))
-    );
+        if(method=='parallel'){
+            Images_c= await Promise.all(
+                Images.map(i => imageCompression(i,compressionOptions))
+            );
+        }
+        else if(method=='sequential'){
+            for(const i of Images){
+                const i_c = await imageCompression(i,compressionOptions);
+                Images_c.push(i_c);
+            };
+        };
+        return Images_c;
     }
     catch (err) {
         alert('Error compressing images');
         console.error(err);
-        return;
-    }
-    return Images_c;
+        return Images;
+    };
 }
 
 function clearForm() {
     document.getElementById('form').reset();
+}
+
+function setPhotoStatus(x,y){
+    let PhotoStatus='';
+    if(x>=1){PhotoStatus+='Y';}
+    else{PhotoStatus+='N';}
+    if(y>=1){PhotoStatus+='Y';}
+    else{PhotoStatus+='N';}
+    return PhotoStatus;
+}
+
+function get_PDI_inspectors(){
+    const elements = document.querySelectorAll('#inspectors-container input[name="PDI inspector"]');
+    const data=Array.from(elements).map(input=>input.value.toLowerCase().trim()).filter(value=>(value!==''));
+    return data;
+}
+
+function get_Issues(){
+    const elements = document.querySelectorAll('#issues-container .dynamic-row');
+    let data = Array.from(elements)
+    data=data.map(row =>{
+        const issueInput = row.querySelector('input[name="issue"]');
+        const qtyInput = row.querySelector('input[name="qty"]');
+        const statusSelect = row.querySelector('select[name="status"]');
+        return {
+            issue: issueInput?.value.trim(),
+            qty: parseInt(qtyInput?.value) || 1,
+            status: statusSelect?.value.trim()
+        };
+    });
+    data=data.filter(i=>{i.issue!=''});
+    return data;
+}
+
+function cleanText(orgText,method){
+    let text=`${orgText}`;
+    switch(method){
+        case 'Project Reference number':
+            text=text.toUpperCase();
+            text=text.replace(/[\/\\]/g, ','); //replaces /,\
+            text=text.replace('.','');
+            text=text.trim();
+            return text;
+        case 'Customer name':
+            text=text.toLowerCase();
+            text=text.trim();
+            return text;
+        case 'Container number':
+            text=text.trim();
+            text=parseInt(text,radix=10)
+            return text;
+        case 'Container ID':
+            text=text.toUpperCase();
+            text=text.replace(/[() ]/g, ""); //replaces (, ,)
+            text=text.trim();
+            return text;
+        case 'uploader':
+            text=text.toLowerCase();
+            text=text.trim();
+            return text;
+    };
+
 }
 
 async function submitForm(event){
@@ -57,50 +127,33 @@ async function submitForm(event){
     const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const formData = new FormData(event.target);
     try{
-        disableForm(true);
-        
-        // Collect PDI Inspectors
-        const Inputs_PDI_inspectors = document.querySelectorAll('#inspectors-container input[name="PDI inspector"]');
-        const data_PDI_inspectors = Array.from(Inputs_PDI_inspectors).map(input=>input.value.trim()).filter(value=>(value!==''));
-
-        // Collect Issues
-        const Rows_Issues = document.querySelectorAll('#issues-container .dynamic-row');
-        const data_Issues = Array.from(Rows_Issues).map( row =>{
-            const issueInput = row.querySelector('input[name="issue"]');
-            const qtyInput = row.querySelector('input[name="qty"]');
-            const statusSelect = row.querySelector('select[name="status"]');
-            return {
-                issue: issueInput?.value.trim(),
-                qty: parseInt(qtyInput?.value) || 1,
-                status: statusSelect?.value.trim()
-            };
-        });
+        disableForm(true);        
+        const data_PDI_inspectors = get_PDI_inspectors(); // Collect PDI Inspectors
+        if(data_PDI_inspectors.length==0){
+            alert("PDI inspector name missing!");
+            return;}
+        const data_Issues = get_Issues();// Collect Issues
 
         //Collect images
         const Input_PDI_report_images= document.getElementById('input-PDI report images');
         const Inputs_PDI_loading_images= document.getElementById('input-PDI loading images');
         const reportImgs = Array.from(Input_PDI_report_images.files);
         const loadingImgs = Array.from(Inputs_PDI_loading_images.files);
-
-        let PhotoStatus='';
-        if(reportImgs.length>=1){PhotoStatus+='Y';}
-        else{PhotoStatus+='N';}
-        if(loadingImgs.length>=1){PhotoStatus+='Y';}
-        else{PhotoStatus+='N';}
+        const PhotoStatus=setPhotoStatus(reportImgs.length,loadingImgs.length);
 
         const data = {
-            Project_Reference_number: `${formData.get('Project Reference number')}`.toUpperCase().replace(/[\/\\]/g, ','),
-            Customer_name: formData.get('Customer name'),
-            Container_number: formData.get('Container number'),
-            Container_ID: `${formData.get('Container ID')}`.toUpperCase(),
+            Project_Reference_number: cleanText(formData.get('Project Reference number'),'Project Reference number'),
+            Customer_name: cleanText(formData.get('Customer name'),'Customer name'),
+            Container_number: cleanText(formData.get('Container number'),'Container number'),
+            Container_ID: cleanText(formData.get('Container ID'),'Container ID'),
             Container_size: formData.get('Container size'),
             Date: formData.get('Date'),
             Shift: formData.get('Shift'),
-            PDI_inspectors: data_PDI_inspectors,
-            Issues: data_Issues,
+            PDI_inspectors: JSON.stringify(data_PDI_inspectors),
+            Issues: JSON.stringify(data_Issues),
             Status: formData.get('Status'),
-            uploader:formData.get('uploader'),
-            photoStatus:PhotoStatus
+            uploader: cleanText(formData.get('uploader'),'uploader'),
+            photoStatus: PhotoStatus
         };
 
         // Create multipart/form-data payload

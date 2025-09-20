@@ -1,0 +1,58 @@
+{
+    "type": "object",
+    "properties": {
+        "Project_Reference_number": {
+            "type": "string"
+        },
+        "Customer_name": {
+            "type": "string"
+        },
+        "Container_number": {
+            "type": "string"
+        },
+        "Container_ID": {
+            "type": "string"
+        },
+        "Container_size": {
+            "type": "string"
+        },
+        "Date": {
+            "type": "string"
+        },
+        "Shift": {
+            "type": "string"
+        },
+        "uploader": {
+            "type": "string"
+        },
+        "PDI_inspectors": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "Issues": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "issue": {
+                        "type": "string"
+                    },
+                    "qty": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Status": {
+            "type": "string"
+        },
+        "photoStatus": {
+            "type": "string"
+        }
+    }
+}
