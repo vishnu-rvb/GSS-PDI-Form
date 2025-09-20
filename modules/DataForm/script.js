@@ -28,7 +28,7 @@ function addRow(type) {
     else {console.error(`template for ${type} not found`);}
 }
 
-async function compressImages(Images,method='sequential') {
+async function compressImages(Images,method='parallel') {
     let Images_c=[]
     const compressionOptions = {
         maxSizeMB: 2,
@@ -36,18 +36,29 @@ async function compressImages(Images,method='sequential') {
         useWebWorker: true
     };
     try {
-        if(method=='parallel'){
+        switch(method){
+        case 'parallel':
             Images_c= await Promise.all(
                 Images.map(i => imageCompression(i,compressionOptions))
             );
-        }
-        else if(method=='sequential'){
+            return Images_c;
+        case 'sequential':
             for(const i of Images){
                 const i_c = await imageCompression(i,compressionOptions);
                 Images_c.push(i_c);
             };
+            return Images_c;
+        case 'batching':
+            const batchSize=5;
+            for(let i=0;i<Images.length;i+=batchSize){
+                const batch = Images.slice(i, i + batchSize);
+                const batch_c = await Promise.all(
+                    batch.map(j => imageCompression(j,compressionOptions))
+                );
+                Images_c.push(...batch_c);
+            };
+            return Images_c;
         };
-        return Images_c;
     }
     catch (err) {
         alert('Error compressing images');
@@ -127,7 +138,8 @@ async function submitForm(event){
     const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const formData = new FormData(event.target);
     try{
-        disableForm(true);        
+        disableForm(true);
+        showLoading(true);       
         const data_PDI_inspectors = get_PDI_inspectors(); // Collect PDI Inspectors
         if(data_PDI_inspectors.length==0){
             alert("PDI inspector name missing!");
@@ -155,7 +167,7 @@ async function submitForm(event){
             uploader: cleanText(formData.get('uploader'),'uploader'),
             photoStatus: PhotoStatus
         };
-
+        
         // Create multipart/form-data payload
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
@@ -167,28 +179,22 @@ async function submitForm(event){
         for (let i=0;i<loadingImgs_c.length;i++){
                 payload.append('PDI_loading_images', loadingImgs_c[i], `Loading image ${i+1} ${loadingImgs_c[i].name}`);
         };
-
         console.log(Array.from(payload.entries()));
-
-        showLoading(true);
+        
         const response= await fetch(URL,{method:'POST',body:payload});
         console.log('Response:', response);
-        if (response.ok){
-            alert('PDI details updated');
-            //clearForm();
-        }
-        else {
-            alert('Failed to submit details');
-            //clearForm();
-        }
+        if (response.ok){alert('PDI details updated');}
+        else {alert('Failed to submit details');};
     }
     catch (error){
         console.error('Error:', error);
         alert('Error submitting data');
     }
     finally{
+        
         disableForm(false);
         showLoading(false);
+
     }
 }
 

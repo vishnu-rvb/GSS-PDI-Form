@@ -42,10 +42,13 @@ Bugs:
     17)if file full name matches then it is overwritten
     18)Loading images attached in PDI report photos -> user scope
     19)black images seen -> to validate
+    20)No button to clear/remove attachment
+    21)loading screen delay -> completed
 
 # Menu
 Main:
     1)Implement menu system -> completed
+    2)Deploy in GSS network
 
 # GSS PDI Reports
 Main:
