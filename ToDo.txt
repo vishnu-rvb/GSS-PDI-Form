@@ -44,6 +44,7 @@ Bugs:
     19)black images seen -> to validate
     20)No button to clear/remove attachment
     21)loading screen delay -> completed
+    22)Issues not captured -> completed
 
 # Menu
 Main:

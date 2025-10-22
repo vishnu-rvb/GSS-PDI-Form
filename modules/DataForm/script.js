@@ -99,7 +99,7 @@ function get_Issues(){
             status: statusSelect?.value.trim()
         };
     });
-    data=data.filter(i=>{i.issue!=''});
+    data=data.filter(i=>i.issue!=='');
     return data;
 }
 
