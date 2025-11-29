@@ -135,7 +135,8 @@ function cleanText(orgText,method){
 
 async function submitForm(event){
     event.preventDefault();
-    const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
+    //const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
+    const URL='https://defaultd44ff7234fa7405eafc043c21e5730.43.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lY53lzYa9xtE9Rnh98qvciOlVB-D0RakYyEWyzjvMP8';
     const formData = new FormData(event.target);
     try{
         disableForm(true);
