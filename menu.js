@@ -29,7 +29,7 @@ async function loadModule(modulePath) {
     const jsPath = modulePath+'/script.js'
     const script = document.createElement("script");
     script.src = jsPath;
-    script.type=
+    //script.type=
     script.defer = true;
     script.setAttribute("data-module", "true");
     document.body.appendChild(script);

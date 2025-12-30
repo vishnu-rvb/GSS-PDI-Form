@@ -30,10 +30,13 @@ function addRow(type) {
 
 async function compressImages(Images,method='parallel') {
     let Images_c=[]
+    const mobile=( /Mobi|Android/i.test(navigator.userAgent));
+    method= mobile? 'batching' : method;
     const compressionOptions = {
         maxSizeMB: 2,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true
+        maxWidthOrHeight: mobile? 800 : 1024,
+        useWebWorker: mobile? false : true,
+        initialQuality: 0.8
     };
     try {
         switch(method){
@@ -69,6 +72,12 @@ async function compressImages(Images,method='parallel') {
 
 function clearForm() {
     document.getElementById('form').reset();
+}
+
+function clearAttachments(){
+    document.getElementById('input-PDI report images').value = "";
+    document.getElementById('input-PDI loading images').value = "";
+    console.log("Attachments cleared");
 }
 
 function setPhotoStatus(x,y){
@@ -200,4 +209,3 @@ async function submitForm(event){
 }
 
 document.getElementById('form').addEventListener('submit', submitForm);
-

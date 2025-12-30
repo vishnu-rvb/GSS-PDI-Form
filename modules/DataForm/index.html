@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSS PDI Data Form</title>
     <!--<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>-->
-    <!--<script src="modules/DataForm/browser-image-compression.js" defer></script>-->
-    <!--<script src="modules/DataForm/script.js" defer></script>
-    <link rel="stylesheet" href="modules/DataForm/styles.css"> -->
-    <script src="browser-image-compression.js" defer></script>
+    <script src="modules/DataForm/browser-image-compression.js" defer></script>
+    <script src="modules/DataForm/script.js" defer></script>
+    <link rel="stylesheet" href="modules/DataForm/styles.css">
+    <!--<script src="browser-image-compression.js" defer></script>
     <script src="script.js" defer></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">-->
 </head>
 <body>
     <div class="heading">
@@ -100,7 +100,8 @@
         <!--PDI loading images-->
         <label for="input-PDI loading images">PDI loading images:</label>
         <input type="file" id="input-PDI loading images" name="PDI loading images" accept="image/*" multiple>
-
+        <!--reset attachment-->
+        <button type="button" class="clear" onclick="clearAttachments()">Clear Attachments</button>
         <label for="input-uploader">Uploaded by:</label>
         <input type="text" id="input-uploader" name="uploader" required>
 
