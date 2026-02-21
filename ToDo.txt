@@ -64,3 +64,4 @@ Main:
     9)Test in mobile/tablet
     10)Explore on PDI report generation cache management
 Bugs:
+    1)image compression failed -> completed

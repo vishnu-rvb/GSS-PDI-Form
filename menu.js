@@ -4,17 +4,13 @@ function clearModule() {
     document.querySelectorAll("link[data-module], script[data-module]").forEach(i => i.remove());
 }
 
-async function loadModule(modulePath) {
-    clearModule();
-
-    // load module HTML
-    const module=modulePath+'/index.html'
-    const resp = await fetch(module);
+async function loadHTML(htmlPath){
+    const resp = await fetch(htmlPath);
     const html = await resp.text();
     document.getElementById("content").innerHTML = html;
+}
 
-    // load module CSS if exists
-    const cssPath = modulePath+'/styles.css'
+function loadCSS(cssPath){
     fetch(cssPath).then(response => {
         if (response.ok) {
             const link = document.createElement("link");
@@ -24,17 +20,23 @@ async function loadModule(modulePath) {
             document.head.appendChild(link);
         }
     });
+}
 
-    // load module JS if exists
-    const jsPath = modulePath+'/script.js'
+function loadJS(jsPath){
     const script = document.createElement("script");
     script.src = jsPath;
-    //script.type=
-    script.defer = true;
+    script.type = "module";
+    //script.defer = true;
     script.setAttribute("data-module", "true");
     document.body.appendChild(script);
 }
 
+async function loadModule(modulePath) {
+    clearModule();
+    loadHTML(modulePath+'/index.html');
+    loadCSS(modulePath+'/styles.css');
+    loadJS(modulePath+'/script.js');
+}
 //redirecting to defaults
 /* document.addEventListener('DOMContentLoaded',
     event =>{

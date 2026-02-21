@@ -1,3 +1,5 @@
+import * as imageCompression from './browser-image-compression.js';
+
 function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
@@ -30,7 +32,7 @@ function addRow(type) {
 
 async function compressImages(Images,method='parallel') {
     let Images_c=[]
-    const mobile=( /Mobi|Android/i.test(navigator.userAgent));
+    const mobile=(/Mobi|Android/i.test(navigator.userAgent));
     method= mobile? 'batching' : method;
     const compressionOptions = {
         maxSizeMB: 2,
@@ -207,5 +209,8 @@ async function submitForm(event){
 
     }
 }
-
-document.getElementById('form').addEventListener('submit', submitForm);
+//making functions public
+window.addRow=addRow;
+window.clearForm=clearForm;
+window.clearAttachments=clearAttachments;
+window.submitForm=submitForm;
