@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>GSS Digital PDI</title>
-<link rel="stylesheet" href="menu.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSS Digital PDI</title>
+    <link rel="stylesheet" href="menu.css">
+    <script src="menu.js" defer></script>
 </head>
 <body>
-<header class="heading">
-<img src="assets/Logo.png" alt="Logo" class="logo">
-<script src="menu.js" defer></script>
-<h1>GSS PDI</h1>
-<nav>
-<button onclick="loadModule('modules/DataForm')">1. PDI Data Form</button>
-<button onclick="loadModule('modules/PDIreport')">2. Fill PDI Report</button>
-<button onclick="loadModule('modules/MakePDIreport')">3. Make PDI Report</button>
-</nav>-->
-</header>
+    <header class="heading">
+        <div class="brand">
+            <img class="logo" src="assets/Logo.png">
+            <h1 class="title">GSS PDI</h1>
+        </div>
+        <nav class="nav-menu">
+            <button class="btn-nav" onclick="loadModule('modules/DataForm')">1. PDI Data Form</button>
+            <button class="btn-nav" onclick="loadModule('modules/PDIreport')">2. Fill PDI Report</button>
+            <button class="btn-nav" onclick="loadModule('modules/MakePDIreport')">3. Make PDI Report</button>
+        </nav>
+    </header>
 <!--<meta http-equiv="refresh" content="1; url=modules/DataForm/index.html"/>-->
 <main id="content">
-<p>Select an option from above.</p>
+    <div class="welcome-card">
+        <p>Select an option from the menu above to get started.</p>
+    </div>
 </main>
-
+<p class="footer-text">Vishnu Balaji R, Godrej & Boyce Mfg. Co. Ltd. © </p>
 </body>
 </html>

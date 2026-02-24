@@ -1,5 +1,3 @@
-import * as imageCompression from './browser-image-compression.js';
-
 function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
@@ -7,15 +5,9 @@ function disableForm(disabled) {
     for (const i of elements){i.disabled=disabled;};
 }
 
-function showLoading(show) {
-    let loadingOverlay = document.getElementById('loading-overlay');
-    if (!loadingOverlay) {
-        loadingOverlay = document.createElement('div');
-        loadingOverlay.id = 'loading-overlay';
-        loadingOverlay.innerHTML = `<div class="loading-box">Loading...</div>`;
-        document.body.appendChild(loadingOverlay);
-    }
-    loadingOverlay.style.display = (show ? 'flex' : 'none');
+function showLoading(value) {
+    const loadingOverlay = document.querySelector('#loading-overlay');
+    loadingOverlay.style.display = (value ? 'flex' : 'none');
 }
 
 function addRow(type) {
@@ -44,11 +36,16 @@ async function compressImages(Images,method='parallel') {
         switch(method){
         case 'parallel':
             Images_c= await Promise.all(
-                Images.map(i => imageCompression(i,compressionOptions))
+                Images.map(i => {
+                    console.log('compressing '+i);
+                    return imageCompression(i,compressionOptions);
+                }
+            )
             );
             return Images_c;
         case 'sequential':
             for(const i of Images){
+                console.log('compressing '+i);
                 const i_c = await imageCompression(i,compressionOptions);
                 Images_c.push(i_c);
             };
@@ -58,7 +55,10 @@ async function compressImages(Images,method='parallel') {
             for(let i=0;i<Images.length;i+=batchSize){
                 const batch = Images.slice(i, i + batchSize);
                 const batch_c = await Promise.all(
-                    batch.map(j => imageCompression(j,compressionOptions))
+                    batch.map(j => {
+                        console.log('compressing '+i);
+                        return imageCompression(j,compressionOptions);
+                    })
                 );
                 Images_c.push(...batch_c);
             };
@@ -129,7 +129,7 @@ function cleanText(orgText,method){
             return text;
         case 'Container number':
             text=text.trim();
-            text=parseInt(text,radix=10)
+            text=parseInt(text,10)
             return text;
         case 'Container ID':
             text=text.toUpperCase();
@@ -183,6 +183,7 @@ async function submitForm(event){
         // Create multipart/form-data payload
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        console.log('building payload');
         let reportImgs_c = await compressImages(reportImgs);
         for (let i=0;i<reportImgs_c.length;i++){
                 payload.append('PDI_report_images', reportImgs_c[i], `PDI report ${i+1} ${reportImgs_c[i].name}`);
@@ -194,6 +195,7 @@ async function submitForm(event){
         console.log(Array.from(payload.entries()));
         
         const response= await fetch(URL,{method:'POST',body:payload});
+        console.log('sent payload');
         console.log('Response:', response);
         if (response.ok){alert('PDI details updated');}
         else {alert('Failed to submit details');};
@@ -203,14 +205,15 @@ async function submitForm(event){
         alert('Error submitting data');
     }
     finally{
-        
         disableForm(false);
         showLoading(false);
 
     }
 }
+
+document.getElementById('form').addEventListener('submit', submitForm);
 //making functions public
 window.addRow=addRow;
 window.clearForm=clearForm;
 window.clearAttachments=clearAttachments;
-window.submitForm=submitForm;
+//window.submitForm=submitForm;

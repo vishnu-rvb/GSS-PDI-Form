@@ -8,6 +8,12 @@ Main:
     6)Deployment -> completed
     7)Implement renaming of attachments -> completed
     8)Test in mobile/tablet -> completed
+Phase 2:
+    1)Implement better look -> completed
+    2)Implement tamil subtext -> completed
+    3)Implement better date picker
+    4)Implement better drop down
+    5)Implement better attachment
 Bugs:
     1)Form submission taking too much and screen idle,to display loading state and disable form -> completed
     2)operator unaware of if data entered or not -> completed
@@ -65,3 +71,4 @@ Main:
     10)Explore on PDI report generation cache management
 Bugs:
     1)image compression failed -> completed
+    2)form not submit -> completed

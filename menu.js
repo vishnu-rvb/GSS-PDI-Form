@@ -22,11 +22,11 @@ function loadCSS(cssPath){
     });
 }
 
-function loadJS(jsPath){
+function loadJS(jsPath,module=true){
     const script = document.createElement("script");
     script.src = jsPath;
-    script.type = "module";
-    //script.defer = true;
+    if(module){script.type = "module";}
+    else{script.defer = true;};
     script.setAttribute("data-module", "true");
     document.body.appendChild(script);
 }
@@ -36,6 +36,9 @@ async function loadModule(modulePath) {
     loadHTML(modulePath+'/index.html');
     loadCSS(modulePath+'/styles.css');
     loadJS(modulePath+'/script.js');
+    if(modulePath==='modules/DataForm'){
+        loadJS(modulePath+'/browser-image-compression.js',false);
+    };
 }
 //redirecting to defaults
 /* document.addEventListener('DOMContentLoaded',
