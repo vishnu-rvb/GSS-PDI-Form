@@ -13,14 +13,23 @@
     <link rel="stylesheet" href="styles.css">-->
 </head>
 <body>
-
+<div id="template-preview-container" style="display: none;">
+  <div class="dz-preview dz-file-preview">
+    <div class="dz-image"><img data-dz-thumbnail /></div>
+    <div class="dz-details">
+      <div class="dz-filename"><span data-dz-name></span></div>
+      <div class="dz-size" data-dz-size></div>
+    </div>
+    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+  </div>
+</div>
     <!-- loading screen -->
     <div id="loading-overlay">
         <div class="loading-box">Loading/ஏற்றுகிறது...</div>
     </div>
-
     <!--templates for inspectors-->
-    <template id="template-inspectors">
+    <template id="inspectors-template">
         <div class="dynamic-row">
             <input type="text" name="PDI inspector" placeholder="Inspector name" required/>
             <button type="button" class="delete_btn" onclick="this.parentElement.remove()">✕</button>
@@ -28,7 +37,7 @@
     </template>
 
     <!--templates for issues-->
-    <template id="template-issues">
+    <template id="issues-template">
         <div class="dynamic-row">
             <input type="text" name="issue" placeholder="Issue" />
             <input type="number" name="qty" placeholder="Qty" min="1" />
@@ -43,21 +52,19 @@
 
     <div class="form-wrapper">
         <header class="form-header">
-            <div class="brand">
-                <h1>GSS PDI Data Form</h1>
-            </div>
+            <h1>PDI Entry Form</h1>
         </header>
 
-        <form id="form" class="card">
-            <div class="form-section">
-                <!--Project Reference number(string)-->
-                <label for="input-Project Reference number">Project Reference number/திட்ட குறிப்பு எண்:</label>
-                <input type="text" id="input-Project Reference number" name="Project Reference number" required>
-                
-                <!--Customer name(string)-->
-                <label for="input-Customer name">Customer name/வாடிக்கையாளர் பெயர்:</label>
-                <input type="text" id="input-Customer name" name="Customer name" required>
-            </div>
+        <form id="form">
+            <!--Project Reference number(string)-->
+            <label for="input-Project Reference number">Project Reference number/திட்ட குறிப்பு எண்:</label>
+            <input type="text" id="input-Project Reference number" name="Project Reference number" required>
+            
+            <!--Customer name(string)-->
+            <label for="input-Customer name">Customer name/வாடிக்கையாளர் பெயர்:</label>
+            <input type="text" id="input-Customer name" name="Customer name" required>
+            <hr>
+
             <div class="form-grid">
                 <div><!--Container number(int)-->
                     <label for="input-Container number">Container number/கொள்கலன் எண்:</label>
@@ -80,7 +87,7 @@
                 </div>
                 <div><!--Date(Date)-->
                     <label for="input-Date">Date/தேதி:</label>
-                    <input type="date" id="input-Date" name="Date" required>
+                    <input type="date" id="input-Date" name="Date"required>
                 </div>
                 <div><!--Shift([ 'A','B','C' ])-->
                     <label for="input-Shift">Shift/ஷிப்ட்:</label>
@@ -105,21 +112,25 @@
                 <button type="button" class="add_btn" onclick="addRow('inspectors')">+</button>
             </div>
             <div id="inspectors-container"></div>
+            <hr>
 
             <div class="dynamic-section-header"><!--Issues([ [ issue(string),qty(int),status(sting) ] ])-->
                 <label>Issues/சிக்கல்கள்:</label>
                 <button type="button" class="add_btn" onclick="addRow('issues')">+</button>
             </div>
             <div id="issues-container"></div>
+            <hr>
 
             <div class="form-grid">
                 <div><!--PDI report images-->
-                    <label for="input-PDI report images">PDI report/பிடிஐ அறிக்கை:</label>
-                    <input type="file" id="input-PDI report images" name="PDI report images" accept="image/*" multiple>
+                    <label for="report-attachments">PDI report/பிடிஐ அறிக்கை:</label>
+                    <div id="pdi-dropzone" class="dropzone"></div>
+                    <input type="file" id="report-attachments" name="PDI report images" accept="image/*" multiple hidden>
                 </div>
                 <div><!--PDI loading images-->
-                    <label for="input-PDI loading images">PDI loading images/பிடிஐ படங்கள்:</label>
-                    <input type="file" id="input-PDI loading images" name="PDI loading images" accept="image/*" multiple>
+                    <label for="photo-attachments">PDI loading images/பிடிஐ படங்கள்:</label>
+                    <div id="photo-dropzone" class="dropzone"></div>
+                    <input type="file" id="photo-attachments" name="PDI loading images" accept="image/*" multiple hidden>
                 </div> 
             </div>
             <label for="input-uploader">Uploaded by/பதிவேற்றியது:</label>

@@ -11,8 +11,8 @@ Main:
 Phase 2:
     1)Implement better look -> completed
     2)Implement tamil subtext -> completed
-    3)Implement better date picker
-    4)Implement better drop down
+    3)Implement better date picker -> completed
+    4)Implement better drop down -> completed
     5)Implement better attachment
 Bugs:
     1)Form submission taking too much and screen idle,to display loading state and disable form -> completed
@@ -51,6 +51,7 @@ Bugs:
     20)No button to clear/remove attachment -> completed
     21)loading screen delay -> completed
     22)Issues not captured -> completed
+    23)Not looking good mobile screen -> completed
 
 # Menu
 Main:

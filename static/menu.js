@@ -25,21 +25,27 @@ function loadCSS(cssPath){
 function loadJS(jsPath,module=true){
     const script = document.createElement("script");
     script.src = jsPath;
-    if(module){script.type = "module";}
-    else{script.defer = true;};
+    script.async = false;
     script.setAttribute("data-module", "true");
+    if(module){script.type = "module";}
     document.body.appendChild(script);
 }
 
-async function loadModule(modulePath) {
+function loadModule(modulePath) {
     clearModule();
     loadHTML(modulePath+'/index.html');
     loadCSS(modulePath+'/styles.css');
-    loadJS(modulePath+'/script.js');
     if(modulePath==='modules/DataForm'){
-        loadJS(modulePath+'/browser-image-compression.js',false);
+        loadJS('static/browser-image-compression.js',false);
+        loadJS('static/flatpickr.js',false);
+        loadCSS('static/flatpickr.css');
+        loadJS('static/dropzone.js',false);
+        loadCSS('static/dropzone.css');
     };
+    loadJS(modulePath+'/script.js');
 }
+
+
 //redirecting to defaults
 /* document.addEventListener('DOMContentLoaded',
     event =>{

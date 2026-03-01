@@ -1,7 +1,25 @@
+const dateInput=flatpickr('#input-Date',{
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat:'d-m-Y'
+});
+Dropzone.autoDiscover = false;
+
+const dropzoneOptions={
+    url: "#", 
+    autoProcessQueue: false,
+    uploadMultiple: true,
+    acceptedFiles: "image/*",
+    //previewsContainer: '<div class="dz-image"><img data-dz-thumbnail /></div>',
+    addRemoveLinks: true,
+}
+for(const i of document.querySelectorAll('.dropzone')){
+    new Dropzone(i, dropzoneOptions);
+};
+
 function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
-    //elements.forEach(i =>{i.disabled = disabled;});
     for (const i of elements){i.disabled=disabled;};
 }
 
@@ -11,7 +29,7 @@ function showLoading(value) {
 }
 
 function addRow(type) {
-    const template = document.getElementById(`template-${type}`);
+    const template = document.getElementById(`${type}-template`);
     const container = document.getElementById(`${type}-container`);
 
     if (template && container) {
@@ -77,8 +95,12 @@ function clearForm() {
 }
 
 function clearAttachments(){
-    document.getElementById('input-PDI report images').value = "";
-    document.getElementById('input-PDI loading images').value = "";
+    for(const i of document.querySelectorAll('input[type="file"]')){
+        i.value='';
+    };
+    for(const i of document.querySelectorAll('.dropzone')){
+        i.dropzone? i.dropzone.removeAllFiles(true):false;
+    };
     console.log("Attachments cleared");
 }
 
@@ -149,6 +171,7 @@ async function submitForm(event){
     //const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const URL='https://defaultd44ff7234fa7405eafc043c21e5730.43.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lY53lzYa9xtE9Rnh98qvciOlVB-D0RakYyEWyzjvMP8';
     const formData = new FormData(event.target);
+    
     try{
         disableForm(true);
         showLoading(true);       
@@ -159,11 +182,8 @@ async function submitForm(event){
         const data_Issues = get_Issues();// Collect Issues
 
         //Collect images
-        const Input_PDI_report_images= document.getElementById('input-PDI report images');
-        const Inputs_PDI_loading_images= document.getElementById('input-PDI loading images');
-        const reportImgs = Array.from(Input_PDI_report_images.files);
-        const loadingImgs = Array.from(Inputs_PDI_loading_images.files);
-        const PhotoStatus=setPhotoStatus(reportImgs.length,loadingImgs.length);
+        const reportImgs = Array.from(document.querySelector('#pdi-dropzone').dropzone.files); //Array.from(document.querySelector('#pdi-attachments').files);
+        const loadingImgs = Array.from(document.querySelector('#photo-dropzone').dropzone.files); //Array.from(document.querySelector('#photo-attachments').files);
 
         const data = {
             Project_Reference_number: cleanText(formData.get('Project Reference number'),'Project Reference number'),
@@ -171,13 +191,13 @@ async function submitForm(event){
             Container_number: cleanText(formData.get('Container number'),'Container number'),
             Container_ID: cleanText(formData.get('Container ID'),'Container ID'),
             Container_size: formData.get('Container size'),
-            Date: formData.get('Date'),
+            Date: formData.get('Date'), //need date in 'Y-m-d'
             Shift: formData.get('Shift'),
             PDI_inspectors: JSON.stringify(data_PDI_inspectors),
             Issues: JSON.stringify(data_Issues),
             Status: formData.get('Status'),
             uploader: cleanText(formData.get('uploader'),'uploader'),
-            photoStatus: PhotoStatus
+            photoStatus: setPhotoStatus(reportImgs.length,loadingImgs.length)
         };
         
         // Create multipart/form-data payload
@@ -207,13 +227,13 @@ async function submitForm(event){
     finally{
         disableForm(false);
         showLoading(false);
-
     }
 }
 
-document.getElementById('form').addEventListener('submit', submitForm);
 //making functions public
 window.addRow=addRow;
 window.clearForm=clearForm;
 window.clearAttachments=clearAttachments;
-//window.submitForm=submitForm;
+//window.submitForm=submitForm
+
+document.querySelector('#form').addEventListener('submit',submitForm);
