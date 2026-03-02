@@ -52,6 +52,7 @@ Bugs:
     21)loading screen delay -> completed
     22)Issues not captured -> completed
     23)Not looking good mobile screen -> completed
+    24)on module reload dropzone and flatpickr not init
 
 # Menu
 Main:

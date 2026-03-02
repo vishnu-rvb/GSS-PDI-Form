@@ -13,17 +13,6 @@
     <link rel="stylesheet" href="styles.css">-->
 </head>
 <body>
-<div id="template-preview-container" style="display: none;">
-  <div class="dz-preview dz-file-preview">
-    <div class="dz-image"><img data-dz-thumbnail /></div>
-    <div class="dz-details">
-      <div class="dz-filename"><span data-dz-name></span></div>
-      <div class="dz-size" data-dz-size></div>
-    </div>
-    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-    <div class="dz-error-message"><span data-dz-errormessage></span></div>
-  </div>
-</div>
     <!-- loading screen -->
     <div id="loading-overlay">
         <div class="loading-box">Loading/ஏற்றுகிறது...</div>
@@ -48,6 +37,13 @@
             </select>
         <button type="button" class="delete_btn" onclick="this.parentElement.remove()">✕</button>
     </div>
+    </template>
+
+    <!--templates for attachments-->
+    <template id="file-template">
+        <div>
+            <p class="name" data-dz-name></p>
+        </div>
     </template>
 
     <div class="form-wrapper">

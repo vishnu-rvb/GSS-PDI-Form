@@ -1,26 +1,62 @@
-const dateInput=flatpickr('#input-Date',{
-    dateFormat: "Y-m-d",
-    altInput: true,
-    altFormat:'d-m-Y'
-});
-Dropzone.autoDiscover = false;
-
-const dropzoneOptions={
-    url: "#", 
-    autoProcessQueue: false,
-    uploadMultiple: true,
-    acceptedFiles: "image/*",
-    //previewsContainer: '<div class="dz-image"><img data-dz-thumbnail /></div>',
-    addRemoveLinks: true,
+function init_flatpickr(items,options){
+    console.log('flatpickr',items);
+    for(const i of items){
+        console.log(i._flatpickr? true:false);
+        i._flatpickr? i._flatpickr.destroy():false; //clear old
+        flatpickr(i,options);
+    };
 }
-for(const i of document.querySelectorAll('.dropzone')){
-    new Dropzone(i, dropzoneOptions);
+
+function init_dropzones(items,options){
+    console.log('dropzone',items);
+    Dropzone.autoDiscover = false;
+    for(const i of items){
+        i.dropzone? i.dropzone.destroy():false; //clear old
+        new Dropzone(i, options);
+        i.dropzone.options.previewsContainer=i;
+        i.dropzone.previewsContainer=i;
+    };
+}
+const runInit = () => {
+    const dz = document.querySelectorAll('.dropzone');
+    const fp = document.querySelectorAll('input[type="date"]');
+
+    if (dz.length > 0) {
+        init_dropzones(dz,{
+            url: "#", 
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            acceptedFiles: "image/*",
+            addRemoveLinks: false,
+            autoQueue: false,
+            previewTemplate: document.querySelector("#file-template").innerHTML,
+            clickable: true
+        });
+    }
+
+    if (fp.length > 0) {
+        init_flatpickr(fp,{
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat:'d-m-Y'
+        });
+    }
 };
+
+setTimeout(runInit, 50); 
 
 function disableForm(disabled) {
     const form = document.getElementById('form');
     const elements = form.querySelectorAll('input, select, button, textarea');
     for (const i of elements){i.disabled=disabled;};
+    for(const i of document.querySelectorAll('.dropzone')){
+        if(disabled){
+            i.dropzone? i.dropzone.disable():false;
+        }
+        else{
+            i.dropzone? i.dropzone.enable():false;
+        };
+    };
 }
 
 function showLoading(value) {

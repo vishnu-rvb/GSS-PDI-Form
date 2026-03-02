@@ -38,13 +38,12 @@ function loadModule(modulePath) {
     if(modulePath==='modules/DataForm'){
         loadJS('static/browser-image-compression.js',false);
         loadJS('static/flatpickr.js',false);
-        loadCSS('static/flatpickr.css');
         loadJS('static/dropzone.js',false);
+        loadCSS('static/flatpickr.css');
         loadCSS('static/dropzone.css');
     };
     loadJS(modulePath+'/script.js');
 }
-
 
 //redirecting to defaults
 /* document.addEventListener('DOMContentLoaded',
