@@ -1,14 +1,13 @@
 function init_flatpickr(items,options){
-    console.log('flatpickr',items);
+    console.log('init flatpickr');
     for(const i of items){
-        console.log(i._flatpickr? true:false);
         i._flatpickr? i._flatpickr.destroy():false; //clear old
         flatpickr(i,options);
     };
 }
 
 function init_dropzones(items,options){
-    console.log('dropzone',items);
+    console.log('init dropzone');
     Dropzone.autoDiscover = false;
     for(const i of items){
         i.dropzone? i.dropzone.destroy():false; //clear old
@@ -17,7 +16,9 @@ function init_dropzones(items,options){
         i.dropzone.previewsContainer=i;
     };
 }
-const runInit = () => {
+
+function init_controls() {
+    console.log('init controls')
     const dz = document.querySelectorAll('.dropzone');
     const fp = document.querySelectorAll('input[type="date"]');
 
@@ -32,7 +33,7 @@ const runInit = () => {
             previewTemplate: document.querySelector("#file-template").innerHTML,
             clickable: true
         });
-    }
+    };
 
     if (fp.length > 0) {
         init_flatpickr(fp,{
@@ -40,10 +41,9 @@ const runInit = () => {
             altInput: true,
             altFormat:'d-m-Y'
         });
-    }
-};
-
-setTimeout(runInit, 50); 
+    };
+    document.querySelector('#form').addEventListener('submit',submitForm);
+}
 
 function disableForm(disabled) {
     const form = document.getElementById('form');
@@ -127,7 +127,8 @@ async function compressImages(Images,method='parallel') {
 }
 
 function clearForm() {
-    document.getElementById('form').reset();
+    console.log('cleared form')
+    document.querySelector('#form').reset();
 }
 
 function clearAttachments(){
@@ -253,7 +254,12 @@ async function submitForm(event){
         const response= await fetch(URL,{method:'POST',body:payload});
         console.log('sent payload');
         console.log('Response:', response);
-        if (response.ok){alert('PDI details updated');}
+        if (response.ok){
+            if(confirm("PDI details updated \n Clear form and files ?")){
+                clearForm();
+                clearAttachments();
+            };
+        }
         else {alert('Failed to submit details');};
     }
     catch (error){
@@ -266,10 +272,7 @@ async function submitForm(event){
     }
 }
 
-//making functions public
 window.addRow=addRow;
 window.clearForm=clearForm;
 window.clearAttachments=clearAttachments;
-//window.submitForm=submitForm
-
-document.querySelector('#form').addEventListener('submit',submitForm);
+window.init_controls=init_controls;

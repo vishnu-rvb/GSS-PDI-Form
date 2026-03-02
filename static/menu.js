@@ -1,53 +1,74 @@
 function clearModule() {
-    const content = document.getElementById("content");
-    content.innerHTML = "";
-    document.querySelectorAll("link[data-module], script[data-module]").forEach(i => i.remove());
+    document.querySelector("#content").innerHTML = "";
+    const dataModules=document.querySelectorAll("link[data-module], script[data-module]");
+    for(const i of dataModules){
+        i.remove();
+        console.log('removed '+i)
+    };
 }
 
-async function loadHTML(htmlPath){
-    const resp = await fetch(htmlPath);
+async function loadHTML(srcPath){
+    const resp = await fetch(srcPath);
     const html = await resp.text();
-    document.getElementById("content").innerHTML = html;
+    document.querySelector("#content").innerHTML = html;
 }
 
-function loadCSS(cssPath){
-    fetch(cssPath).then(response => {
-        if (response.ok) {
-            const link = document.createElement("link");
-            link.rel = "stylesheet";
-            link.href = cssPath;
-            link.setAttribute("data-module", "true");
-            document.head.appendChild(link);
-        }
+async function loadCSS(srcPath){
+    return new Promise((resolve, reject)=>{
+        const element = document.createElement("link");
+        element.rel = "stylesheet";
+        element.href = srcPath + "?t=" + Date.now();
+        element.setAttribute("data-module", "true");
+        element.onload = ()=>{
+            console.log("loaded ", srcPath);
+            resolve();
+        };
+        element.onerror = ()=>{
+            console.error("failed ", srcPath);
+            reject();
+        };
+        document.head.appendChild(element);
     });
 }
 
-function loadJS(jsPath,module=true){
-    const script = document.createElement("script");
-    script.src = jsPath;
-    script.async = false;
-    script.setAttribute("data-module", "true");
-    if(module){script.type = "module";}
-    document.body.appendChild(script);
+async function loadJS(srcPath,module=false){
+    return new Promise((resolve, reject)=>{
+        const element = document.createElement("script");
+        element.src = srcPath + "?t=" + Date.now();
+        element.async = false;
+        if (module) {element.type = "module";}
+        element.onload = ()=>{
+            console.log("loaded ", srcPath);
+            resolve();
+        };
+        element.onerror = ()=>{
+            console.error("failed ", srcPath);
+            reject();
+        };
+        document.head.appendChild(element);
+    });
 }
 
-function loadModule(modulePath) {
+async function loadModule(modulePath) {
     clearModule();
-    loadHTML(modulePath+'/index.html');
-    loadCSS(modulePath+'/styles.css');
-    if(modulePath==='modules/DataForm'){
-        loadJS('static/browser-image-compression.js',false);
-        loadJS('static/flatpickr.js',false);
-        loadJS('static/dropzone.js',false);
-        loadCSS('static/flatpickr.css');
-        loadCSS('static/dropzone.css');
-    };
-    loadJS(modulePath+'/script.js');
-}
 
-//redirecting to defaults
-/* document.addEventListener('DOMContentLoaded',
-    event =>{
-        event.preventDefault();
-        loadModule('modules/DataForm');
-    }); */
+    if(modulePath==='/modules/DataForm'){
+        await Promise.all([
+            loadJS('/static/browser-image-compression.js'),
+            loadJS('/static/flatpickr.js'),
+            loadJS('/static/dropzone.js'),
+            loadCSS('/static/flatpickr.css'),
+            loadCSS('/static/dropzone.css')
+        ]);
+    };
+
+    await Promise.all([
+        loadHTML(modulePath+'/index.html'),
+        loadCSS(modulePath+'/styles.css'),
+        loadJS(modulePath+'/script.js',true)
+    ]);
+
+    if(typeof(window.init_controls)==='function'){
+        window.init_controls();
+    };
+}

@@ -13,7 +13,8 @@ Phase 2:
     2)Implement tamil subtext -> completed
     3)Implement better date picker -> completed
     4)Implement better drop down -> completed
-    5)Implement better attachment
+    5)Implement better attachment -> completed
+    6)Implement clear form question on form submit -> completed
 Bugs:
     1)Form submission taking too much and screen idle,to display loading state and disable form -> completed
     2)operator unaware of if data entered or not -> completed
@@ -52,12 +53,12 @@ Bugs:
     21)loading screen delay -> completed
     22)Issues not captured -> completed
     23)Not looking good mobile screen -> completed
-    24)on module reload dropzone and flatpickr not init
+    24)on module reload dropzone and flatpickr not init -> completed
 
 # Menu
 Main:
     1)Implement menu system -> completed
-    2)Deploy in GSS network
+    2)Deploy in GSS network -> completed
 
 # GSS PDI Reports
 Main:
