@@ -52,13 +52,13 @@ async function loadJS(srcPath,module=false){
 async function loadModule(modulePath) {
     clearModule();
 
-    if(modulePath==='/modules/DataForm'){
+    if(modulePath==='modules/DataForm'){
         await Promise.all([
-            loadJS('/static/browser-image-compression.js'),
-            loadJS('/static/flatpickr.js'),
-            loadJS('/static/dropzone.js'),
-            loadCSS('/static/flatpickr.css'),
-            loadCSS('/static/dropzone.css')
+            loadJS('static/browser-image-compression.js'),
+            loadJS('static/flatpickr.js'),
+            loadJS('static/dropzone.js'),
+            loadCSS('static/flatpickr.css'),
+            loadCSS('static/dropzone.css')
         ]);
     };
 

@@ -54,7 +54,7 @@ Bugs:
     22)Issues not captured -> completed
     23)Not looking good mobile screen -> completed
     24)on module reload dropzone and flatpickr not init -> completed
-
+    25)paths not loaded in github pages -> completed
 # Menu
 Main:
     1)Implement menu system -> completed
