@@ -13,15 +13,16 @@
 <!--templates for issues-->
 <template id="issues-template">
     <div class="dynamic-row">
-        <input type="text" name="issue" placeholder="Issue" />
-        <input type="number" name="qty" placeholder="Qty" min="1" />
+        <input type="text" name="description" placeholder="Description">
+        <input type="text" name="issue" placeholder="Issue">
+        <input type="number" name="qty" placeholder="Qty" min="1">
         <select name="status">
             <option value="Hold">Hold</option>
             <option value="Reworked">Reworked</option>
             <option value="Scraped">Scraped</option>
         </select>
-    <button type="button" class="delete_btn" onclick="this.parentElement.remove()">✕</button>
-</div>
+        <button type="button" class="delete_btn" onclick="this.parentElement.remove()">✕</button>
+    </div>
 </template>
 
 <!--templates for attachments-->

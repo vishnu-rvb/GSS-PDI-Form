@@ -119,9 +119,9 @@ async function compressImages(Images,method='parallel') {
             return Images_c;
         };
     }
-    catch (err) {
-        alert('Error compressing images');
-        console.error(err);
+    catch (error) {
+        alert(`Error compressing images: ${error}`);
+        console.error(error);
         return Images;
     };
 }
@@ -160,16 +160,17 @@ function get_Issues(){
     const elements = document.querySelectorAll('#issues-container .dynamic-row');
     let data = Array.from(elements)
     data=data.map(row =>{
+        const descInput = row.querySelector('input[name="description"]');
         const issueInput = row.querySelector('input[name="issue"]');
         const qtyInput = row.querySelector('input[name="qty"]');
         const statusSelect = row.querySelector('select[name="status"]');
         return {
+            description: descInput?.value.trim(),
             issue: issueInput?.value.trim(),
             qty: parseInt(qtyInput?.value) || 1,
             status: statusSelect?.value.trim()
         };
     });
-    data=data.filter(i=>i.issue!=='');
     return data;
 }
 
@@ -205,23 +206,33 @@ function cleanText(orgText,method){
 
 async function submitForm(event){
     event.preventDefault();
+    
     //const URL = 'https://prod-00.centralindia.logic.azure.com:443/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=z0Tw_0SxfoKUpBKZ6F-usJ1v4PuubE2QudT9ULdUmAI';
     const URL='https://defaultd44ff7234fa7405eafc043c21e5730.43.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/549c8634d35547fd816ae21d607110ab/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lY53lzYa9xtE9Rnh98qvciOlVB-D0RakYyEWyzjvMP8';
     const formData = new FormData(event.target);
-    
     try{
         disableForm(true);
         showLoading(true);       
         const data_PDI_inspectors = get_PDI_inspectors(); // Collect PDI Inspectors
-        if(data_PDI_inspectors.length==0){
-            alert("PDI inspector name missing!");
-            return;}
         const data_Issues = get_Issues();// Collect Issues
 
-        //Collect images
-        const reportImgs = Array.from(document.querySelector('#pdi-dropzone').dropzone.files); //Array.from(document.querySelector('#pdi-attachments').files);
-        const loadingImgs = Array.from(document.querySelector('#photo-dropzone').dropzone.files); //Array.from(document.querySelector('#photo-attachments').files);
-
+        //form criteria checks
+        if(formData.get('Date')===''){
+            alert('Please enter Date');
+            return;
+        };
+        if(data_PDI_inspectors.length===0){
+            alert("PDI inspector name missing!");
+            return;
+        };
+        if(data_PDI_inspectors.filter(i=>i.includes(',')).length>0){
+            alert('Please enter inspectors name properly');
+            return;
+        };
+        if(data_Issues.filter(i=>i.issue==='' || i.description==='').length>0){
+            alert('Please enter issues properly');
+            return;
+        };
         const data = {
             Project_Reference_number: cleanText(formData.get('Project Reference number'),'Project Reference number'),
             Customer_name: cleanText(formData.get('Customer name'),'Customer name'),
@@ -236,11 +247,16 @@ async function submitForm(event){
             uploader: cleanText(formData.get('uploader'),'uploader'),
             photoStatus: setPhotoStatus(reportImgs.length,loadingImgs.length)
         };
-        
+
         // Create multipart/form-data payload
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
         console.log('building payload');
+
+        //Collect images
+        const reportImgs = Array.from(document.querySelector('#pdi-dropzone').dropzone.files); //Array.from(document.querySelector('#pdi-attachments').files);
+        const loadingImgs = Array.from(document.querySelector('#photo-dropzone').dropzone.files); //Array.from(document.querySelector('#photo-attachments').files);
+
         let reportImgs_c = await compressImages(reportImgs);
         for (let i=0;i<reportImgs_c.length;i++){
                 payload.append('PDI_report_images', reportImgs_c[i], `PDI report ${i+1} ${reportImgs_c[i].name}`);
@@ -249,7 +265,6 @@ async function submitForm(event){
         for (let i=0;i<loadingImgs_c.length;i++){
                 payload.append('PDI_loading_images', loadingImgs_c[i], `Loading image ${i+1} ${loadingImgs_c[i].name}`);
         };
-        console.log(Array.from(payload.entries()));
         
         const response= await fetch(URL,{method:'POST',body:payload});
         console.log('sent payload');
@@ -260,11 +275,11 @@ async function submitForm(event){
                 clearAttachments();
             };
         }
-        else {alert('Failed to submit details');};
+        else {alert('Server no response');};
     }
     catch (error){
         console.error('Error:', error);
-        alert('Error submitting data');
+        alert(`Error submitting data: ${error}`);
     }
     finally{
         disableForm(false);

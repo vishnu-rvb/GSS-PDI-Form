@@ -55,6 +55,11 @@ Bugs:
     23)Not looking good mobile screen -> completed
     24)on module reload dropzone and flatpickr not init -> completed
     25)paths not loaded in github pages -> completed
+    26)Issues description not mentioned -> completed
+    27)Date not being required -> completed
+    28)Inspector name input in single row -> completed
+    29)Error messages not visible -> completed
+    30)Inspectors, issues rows too small in mobile -> completed
 # Menu
 Main:
     1)Implement menu system -> completed
