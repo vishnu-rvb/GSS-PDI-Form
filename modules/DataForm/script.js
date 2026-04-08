@@ -233,6 +233,11 @@ async function submitForm(event){
             alert('Please enter issues properly');
             return;
         };
+
+        //Collect images
+        const reportImgs = Array.from(document.querySelector('#pdi-dropzone').dropzone.files); //Array.from(document.querySelector('#pdi-attachments').files);
+        const loadingImgs = Array.from(document.querySelector('#photo-dropzone').dropzone.files); //Array.from(document.querySelector('#photo-attachments').files);
+        
         const data = {
             Project_Reference_number: cleanText(formData.get('Project Reference number'),'Project Reference number'),
             Customer_name: cleanText(formData.get('Customer name'),'Customer name'),
@@ -252,10 +257,6 @@ async function submitForm(event){
         const payload = new FormData();
         payload.append('json', new Blob([JSON.stringify(data)], { type: 'application/json' }));
         console.log('building payload');
-
-        //Collect images
-        const reportImgs = Array.from(document.querySelector('#pdi-dropzone').dropzone.files); //Array.from(document.querySelector('#pdi-attachments').files);
-        const loadingImgs = Array.from(document.querySelector('#photo-dropzone').dropzone.files); //Array.from(document.querySelector('#photo-attachments').files);
 
         let reportImgs_c = await compressImages(reportImgs);
         for (let i=0;i<reportImgs_c.length;i++){

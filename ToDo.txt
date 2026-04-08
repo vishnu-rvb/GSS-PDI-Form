@@ -60,6 +60,7 @@ Bugs:
     28)Inspector name input in single row -> completed
     29)Error messages not visible -> completed
     30)Inspectors, issues rows too small in mobile -> completed
+    31)Files not getting uploaded -> completed
 # Menu
 Main:
     1)Implement menu system -> completed
